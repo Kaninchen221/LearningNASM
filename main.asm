@@ -1,16 +1,29 @@
-section .data
-    message db "Hello, world!", 0Ah ; Message to print
-    len equ $-message ; Length of the message
+%include "win32n.inc"
 
-section .text
-    global _start
+extern MessageBoxA
+import MessageBoxA user32.dll
+
+extern ExitProcess
+import ExitProcess kernel32.dll
+
+segment .data USE32
+
+	title	db "A message for you", 0
+	message db "This is your first message", 0
+
+segment	.bss USE32
+
+segment .code USE32
 
 ..start:
-    mov eax, 4 ; System call number for write
-    mov ebx, 1 ; File descriptor (stdout)
-    mov ecx, message ; Address of the message
-    mov edx, len ; Length of the message
-    int 0x21 ; System call
 
-    mov eax, 1 ; System call number for exit
-    int 0x21
+	; show the message box
+	push MB_OK
+	push title
+	push message
+	push 0
+	call [MessageBoxA]
+
+	; return control back to windows
+	push 0
+	call [ExitProcess]

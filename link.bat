@@ -1,3 +1,3 @@
 @echo off
 
-alink\ALINK -oPE -o build/main.exe "build/main.obj"
+alink\ALINK -subsys gui -oPE -o build/main.exe build/main.obj
